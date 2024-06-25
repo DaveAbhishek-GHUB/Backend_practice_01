@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const port = 3000;
-const fs = require('fs')
+const fs = require('fs');
+const { emitWarning } = require('process');
 
 // Set EJS as view engine
 app.set('view engine', 'ejs');
@@ -22,6 +23,13 @@ app.get('/', (req, res) => {
         console.log(files);
         res.render('index', {files: files});
     })
+});
+
+app.get('/file/:filename', (req, res) => {
+    fs.readFile(`./files/${req.params.filename}`, "utf-8", function(err, filedata){
+        res.render('show', {filename: req.params.filename, filedata: filedata});
+        // console.log(filedata);
+    });
 });
 
 app.post('/create', function (req, res){
