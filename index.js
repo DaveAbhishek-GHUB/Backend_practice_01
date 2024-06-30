@@ -32,11 +32,23 @@ app.get('/file/:filename', (req, res) => {
     });
 });
 
+app.get('/edit/:filename', (req, res) => {
+        res.render('edit', {filename:req.params.filename});
+});
+
+// this route rename the file name
+app.post('/edit', (req, res) => {
+    fs.rename(`./files/${req.body.oldname}`, `./files/${req.body.new}`, function(err){
+        res.redirect("/");
+        console.log(req.body);
+
+    })
+});
+
 app.post('/create', function (req, res){
     fs.writeFile(`./files/${req.body.title.split(' ').join('')}.txt`, req.body.textarea, function(err){
         res.redirect("/"); 
     });
-    // console.log(req.body);
 });
 
 // Start the server
